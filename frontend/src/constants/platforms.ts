@@ -18,6 +18,7 @@ export const CONCRETE_PLATFORM_OPTIONS = [
   { value: 'kiro', label: 'Kiro' },
   { value: 'grok', label: 'Grok' },
   { value: 'adobe', label: 'Adobe' },
+  { value: 'cursor', label: 'Cursor' },
   { value: 'kimi', label: 'Kimi' },
   { value: 'zhipu', label: 'Zhipu GLM' },
   { value: 'deepseek', label: 'DeepSeek' },

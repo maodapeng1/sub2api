@@ -645,8 +645,12 @@ export interface SyncUpstreamPreviewParams {
   platform: string
   type: string
   base_url?: string
-  api_key: string
+  api_key?: string
   model_mapping?: Record<string, string>
+  access_token?: string
+  machine_id?: string
+  mac_machine_id?: string
+  client_version?: string
 }
 
 /**

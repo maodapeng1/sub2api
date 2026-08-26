@@ -28,6 +28,7 @@ import (
 
 	"github.com/Wei-Shaw/sub2api/internal/config"
 	"github.com/Wei-Shaw/sub2api/internal/pkg/claude"
+	"github.com/Wei-Shaw/sub2api/internal/pkg/cursor"
 	"github.com/Wei-Shaw/sub2api/internal/pkg/geminicli"
 	kiropkg "github.com/Wei-Shaw/sub2api/internal/pkg/kiro"
 	"github.com/Wei-Shaw/sub2api/internal/pkg/openai"
@@ -161,6 +162,8 @@ type AccountTestService struct {
 	grokWSDialer openAIWSClientDialer
 	// adobeTokenProvider 为 nil 时 Adobe 测试路径按需构造本地 provider。
 	adobeTokenProvider *AdobeTokenProvider
+	// cursorAvailableModels is optional; tests inject a fake picker catalog.
+	cursorAvailableModels func(context.Context, cursor.Credentials) ([]cursor.AvailableModel, error)
 }
 
 func (s *AccountTestService) SetSettingService(settingService *SettingService) {

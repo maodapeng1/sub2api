@@ -204,6 +204,9 @@ const platformClass = computed(() => {
   if (props.platform === 'adobe') {
     return 'bg-adobe-100 text-adobe-700 dark:bg-adobe-900/30 dark:text-adobe-400'
   }
+  if (props.platform === 'cursor') {
+    return 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'
+  }
   if (props.platform === 'kimi') {
     return 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400'
   }
@@ -237,6 +240,9 @@ const typeClass = computed(() => {
   }
   if (props.platform === 'adobe') {
     return 'bg-adobe-100 text-adobe-600 dark:bg-adobe-900/30 dark:text-adobe-400'
+  }
+  if (props.platform === 'cursor') {
+    return 'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-300'
   }
   if (props.platform === 'kimi') {
     return 'bg-pink-100 text-pink-600 dark:bg-pink-900/30 dark:text-pink-400'

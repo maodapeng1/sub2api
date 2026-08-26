@@ -237,4 +237,28 @@ describe('ModelWhitelistSelector', () => {
     expect(syncButton).toBeDefined()
     expect(syncButton?.exists()).toBe(true)
   })
+
+  it('loads the live Cursor picker into dropdown options without selecting them', async () => {
+    syncUpstreamModels.mockResolvedValue({
+      models: ['default', 'claude-opus-5', 'gpt-5.6-sol']
+    })
+
+    const wrapper = mount(ModelWhitelistSelector, {
+      props: {
+        modelValue: [],
+        platform: 'cursor',
+        accountId: 51
+      },
+      global: {
+        stubs: {
+          ModelIcon: true
+        }
+      }
+    })
+    await flushPromises()
+
+    expect(syncUpstreamModels).toHaveBeenCalledWith(51)
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('catalog-loaded')?.[0]).toEqual([['default', 'claude-opus-5', 'gpt-5.6-sol']])
+  })
 })

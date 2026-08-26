@@ -43,6 +43,7 @@ const (
 	PlatformKiro        = domain.PlatformKiro
 	PlatformGrok        = domain.PlatformGrok
 	PlatformAdobe       = domain.PlatformAdobe
+	PlatformCursor      = domain.PlatformCursor
 	PlatformKimi        = domain.PlatformKimi
 	PlatformZhipu       = domain.PlatformZhipu
 	PlatformDeepseek    = domain.PlatformDeepseek
@@ -60,6 +61,7 @@ func AllPlatforms() []string {
 		PlatformKiro,
 		PlatformGrok,
 		PlatformAdobe,
+		PlatformCursor,
 		PlatformKimi,
 		PlatformZhipu,
 		PlatformDeepseek,

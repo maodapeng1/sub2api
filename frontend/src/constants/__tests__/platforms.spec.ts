@@ -9,6 +9,7 @@ const concretePlatforms = [
   'kiro',
   'grok',
   'adobe',
+  'cursor',
   'kimi',
   'zhipu',
   'deepseek',

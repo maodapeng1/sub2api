@@ -168,6 +168,9 @@ const labelClass = computed(() => {
   if (props.platform === 'adobe') {
     return `${base} bg-adobe-200/60 text-adobe-800 dark:bg-adobe-800/40 dark:text-adobe-300`
   }
+  if (props.platform === 'cursor') {
+    return `${base} bg-amber-200/60 text-amber-800 dark:bg-amber-800/40 dark:text-amber-300`
+  }
   if (props.platform === 'kimi') {
     return `${base} bg-pink-200/60 text-pink-800 dark:bg-pink-800/40 dark:text-pink-300`
   }
@@ -227,6 +230,11 @@ const badgeClass = computed(() => {
     return isSubscription.value
       ? 'bg-adobe-100 text-adobe-700 dark:bg-adobe-900/30 dark:text-adobe-400'
       : 'bg-adobe-50 text-adobe-700 dark:bg-adobe-900/20 dark:text-adobe-400'
+  }
+  if (props.platform === 'cursor') {
+    return isSubscription.value
+      ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'
+      : 'bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400'
   }
   if (props.platform === 'kimi') {
     return isSubscription.value

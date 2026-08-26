@@ -128,5 +128,30 @@ describe('PlatformTypeBadge MiniMax', () => {
     expect(wrapper.text()).toContain('Key')
     expect(wrapper.text()).not.toContain('Gemini')
     expect(wrapper.html()).toContain('bg-rose-100')
+describe('PlatformTypeBadge Cursor', () => {
+  it('labels Cursor oauth accounts as Cursor, not Gemini', () => {
+    const wrapper = mount(PlatformTypeBadge, {
+      props: {
+        platform: 'cursor',
+        type: 'oauth',
+      },
+    })
+
+    expect(wrapper.text()).toContain('Cursor')
+    expect(wrapper.text()).toContain('OAuth')
+    expect(wrapper.text()).not.toContain('Gemini')
+    expect(wrapper.html()).toContain('bg-amber-100')
+  })
+
+  it('still labels Gemini accounts as Gemini', () => {
+    const wrapper = mount(PlatformTypeBadge, {
+      props: {
+        platform: 'gemini',
+        type: 'oauth',
+      },
+    })
+
+    expect(wrapper.text()).toContain('Gemini')
+    expect(wrapper.text()).not.toContain('Cursor')
   })
 })

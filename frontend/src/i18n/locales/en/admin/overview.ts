@@ -1044,6 +1044,7 @@ export default {
         grok: 'Grok',
         kiro: 'Kiro',
         adobe: 'Adobe',
+        cursor: 'Cursor',
         kimi: 'Kimi',
         zhipu: 'Zhipu GLM',
         deepseek: 'DeepSeek',
