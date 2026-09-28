@@ -814,6 +814,7 @@ export default {
         methodManual: 'Paste tokens',
         oauthHint: 'Generate a login link and authenticate on cursor.com in the browser; tokens are fetched automatically. No machine IDs required.',
         oauthStart: 'Generate login link',
+        oauthStartFailed: 'Could not generate a login link. Please try again.',
         oauthOpen: 'Open Cursor login page',
         oauthWaiting: 'Waiting for browser login…',
         oauthDone: 'Authorized — tokens filled in. You can create the account now.',

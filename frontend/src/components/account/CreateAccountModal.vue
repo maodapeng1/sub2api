@@ -642,10 +642,10 @@
             <p v-if="cursorAccessToken" class="text-xs text-emerald-600 dark:text-emerald-400" data-testid="cursor-oauth-done">
               {{ t('admin.accounts.cursor.oauthDone') }}
             </p>
-            <p v-if="cursorOAuthError" class="text-xs text-red-600 dark:text-red-400" data-testid="cursor-oauth-error">
-              {{ cursorOAuthError }}
-            </p>
           </template>
+          <p v-if="cursorOAuthError" class="text-xs text-red-600 dark:text-red-400" data-testid="cursor-oauth-error">
+            {{ cursorOAuthError }}
+          </p>
         </div>
 
         <p v-if="cursorAuthMethod === 'manual'" class="text-xs text-gray-500 dark:text-gray-400">{{ t('admin.accounts.cursor.hint') }}</p>
@@ -5254,14 +5254,23 @@ async function startCursorOAuthFlow() {
   cursorOAuthStarting.value = true
   try {
     const res = await startCursorOAuth()
+    if (!res?.url) {
+      throw new Error(t('admin.accounts.cursor.oauthStartFailed'))
+    }
     cursorOAuthURL.value = res.url
     cursorOAuthUUID.value = res.uuid
     cursorOAuthVerifier.value = res.verifier
     cursorOAuthAttempts = 0
     stopCursorOAuthPolling()
     cursorOAuthTimer = setInterval(pollCursorOAuthOnce, 2000)
+    window.open(res.url, '_blank', 'noopener')
   } catch (e) {
-    cursorOAuthError.value = e instanceof Error ? e.message : String(e)
+    cursorOAuthError.value =
+      e instanceof Error
+        ? e.message
+        : typeof e === 'object' && e && 'message' in e && typeof (e as { message: unknown }).message === 'string'
+          ? (e as { message: string }).message
+          : t('admin.accounts.cursor.oauthStartFailed')
   } finally {
     cursorOAuthStarting.value = false
   }

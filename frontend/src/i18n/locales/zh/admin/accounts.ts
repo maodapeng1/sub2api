@@ -930,6 +930,7 @@ export default {
         methodManual: '粘贴 Token',
         oauthHint: '点击生成授权链接并在浏览器中完成 Cursor 登录，系统会自动获取访问令牌。此方式无需机器 ID。',
         oauthStart: '生成授权链接',
+        oauthStartFailed: '生成授权链接失败，请重试。',
         oauthOpen: '在浏览器中打开 Cursor 授权页',
         oauthWaiting: '等待浏览器授权完成……',
         oauthDone: '授权成功，已填入令牌。可直接创建账号。',
