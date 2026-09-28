@@ -1235,6 +1235,7 @@ function generateRoutedCodexFiles(
     antigravity: 'claude-sonnet-4-6',
     kiro: 'claude-sonnet-4-6',
     grok: 'grok-4.5',
+    cursor: 'composer-2.5',
     kimi: 'kimi-k2.5',
     zhipu: 'glm-4.7',
     deepseek: 'deepseek-v4-pro',
@@ -1254,6 +1255,7 @@ function generateRoutedCodexFiles(
     // Adobe 是图像生成渠道，没有可用于 Codex CLI 的对话模型，故 preferredModels
     // 里不给它预设值（会回落到空串）；label 仍需列出以满足穷尽映射。
     adobe: 'Adobe',
+    cursor: 'Cursor',
     kimi: 'Kimi',
     zhipu: 'Zhipu',
     deepseek: 'DeepSeek',

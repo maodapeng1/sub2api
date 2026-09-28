@@ -17,6 +17,7 @@ const PROVIDER_BY_PLATFORM: Record<GroupPlatform, KeyGroupProvider> = {
   antigravity: 'other',
   kiro: 'other',
   adobe: 'other',
+  cursor: 'other',
   composite: 'other',
   opencode_go: 'other'
 }
