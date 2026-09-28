@@ -74,6 +74,13 @@ func TestPollAuthSessionPendingAndSuccess(t *testing.T) {
 	require.Equal(t, "rt", session.RefreshToken)
 }
 
+func TestParseAuthSessionAcceptsSnakeCase(t *testing.T) {
+	session, err := parseAuthSession([]byte(`{"access_token":"at","refresh_token":"rt"}`))
+	require.NoError(t, err)
+	require.Equal(t, "at", session.AccessToken)
+	require.Equal(t, "rt", session.RefreshToken)
+}
+
 func TestPollAuthSessionErrorStatus(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusForbidden)

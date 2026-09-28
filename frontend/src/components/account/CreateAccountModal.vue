@@ -640,7 +640,11 @@
               {{ t('admin.accounts.cursor.oauthWaiting') }}
             </p>
             <p v-if="cursorAccessToken" class="text-xs text-emerald-600 dark:text-emerald-400" data-testid="cursor-oauth-done">
-              {{ t('admin.accounts.cursor.oauthDone') }}
+              {{
+                cursorRefreshToken
+                  ? t('admin.accounts.cursor.oauthDone')
+                  : t('admin.accounts.cursor.oauthDoneAccessOnly')
+              }}
             </p>
           </template>
           <p v-if="cursorOAuthError" class="text-xs text-red-600 dark:text-red-400" data-testid="cursor-oauth-error">
@@ -649,31 +653,39 @@
         </div>
 
         <p v-if="cursorAuthMethod === 'manual'" class="text-xs text-gray-500 dark:text-gray-400">{{ t('admin.accounts.cursor.hint') }}</p>
-        <div>
+        <div v-if="cursorAuthMethod === 'manual' || cursorAccessToken">
           <label class="input-label">{{ t('admin.accounts.cursor.accessToken') }}</label>
-          <input
+          <textarea
             v-model="cursorAccessToken"
             data-testid="cursor-access-token"
-            type="password"
+            rows="3"
             autocomplete="off"
-            class="input font-mono"
+            spellcheck="false"
+            class="input font-mono text-xs"
             :placeholder="t('admin.accounts.cursor.accessTokenPlaceholder')"
           />
           <p class="input-hint">{{ t('admin.accounts.cursor.accessTokenHint') }}</p>
         </div>
-        <div>
+        <div v-if="cursorAuthMethod === 'manual' || cursorAccessToken">
           <label class="input-label">{{ t('admin.accounts.cursor.refreshToken') }}</label>
-          <input
+          <textarea
             v-model="cursorRefreshToken"
             data-testid="cursor-refresh-token"
-            type="password"
+            rows="3"
             autocomplete="off"
-            class="input font-mono"
+            spellcheck="false"
+            class="input font-mono text-xs"
             :placeholder="t('admin.accounts.cursor.refreshTokenPlaceholder')"
           />
-          <p class="input-hint">{{ t('admin.accounts.cursor.refreshTokenHint') }}</p>
+          <p class="input-hint">
+            {{
+              cursorAuthMethod === 'browser' && cursorAccessToken && !cursorRefreshToken
+                ? t('admin.accounts.cursor.refreshTokenMissing')
+                : t('admin.accounts.cursor.refreshTokenHint')
+            }}
+          </p>
         </div>
-        <div>
+        <div v-if="cursorAuthMethod === 'manual'">
           <label class="input-label">{{ t('admin.accounts.cursor.machineId') }}</label>
           <input
             v-model="cursorMachineId"
@@ -686,7 +698,7 @@
           />
           <p class="input-hint">{{ t('admin.accounts.cursor.machineIdHint') }}</p>
         </div>
-        <div>
+        <div v-if="cursorAuthMethod === 'manual'">
           <label class="input-label">{{ t('admin.accounts.cursor.macMachineId') }}</label>
           <input
             v-model="cursorMacMachineId"
@@ -699,7 +711,7 @@
           />
           <p class="input-hint">{{ t('admin.accounts.cursor.macMachineIdHint') }}</p>
         </div>
-        <div>
+        <div v-if="cursorAuthMethod === 'manual'">
           <label class="input-label">{{ t('admin.accounts.cursor.clientVersion') }}</label>
           <input
             v-model="cursorClientVersion"

@@ -93,8 +93,35 @@ func PKCEChallenge(verifier string) string {
 
 // AuthSession is the token pair returned by auth/poll once login completes.
 type AuthSession struct {
-	AccessToken  string
-	RefreshToken string
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+}
+
+type authSessionWire struct {
+	AccessToken     string `json:"accessToken"`
+	RefreshToken    string `json:"refreshToken"`
+	AccessTokenAlt  string `json:"access_token"`
+	RefreshTokenAlt string `json:"refresh_token"`
+}
+
+func firstNonEmpty(values ...string) string {
+	for _, value := range values {
+		if trimmed := strings.TrimSpace(value); trimmed != "" {
+			return trimmed
+		}
+	}
+	return ""
+}
+
+func parseAuthSession(body []byte) (*AuthSession, error) {
+	var wire authSessionWire
+	if err := json.Unmarshal(body, &wire); err != nil {
+		return nil, err
+	}
+	return &AuthSession{
+		AccessToken:  firstNonEmpty(wire.AccessToken, wire.AccessTokenAlt),
+		RefreshToken: firstNonEmpty(wire.RefreshToken, wire.RefreshTokenAlt),
+	}, nil
 }
 
 // PollAuthSession queries Cursor once for the login status. Returns
@@ -135,16 +162,14 @@ func PollAuthSession(ctx context.Context, httpClient *http.Client, uuidStr, veri
 	}
 	switch {
 	case resp.StatusCode == http.StatusOK:
-		var session AuthSession
-		if err := json.Unmarshal(body, &session); err != nil {
+		session, err := parseAuthSession(body)
+		if err != nil {
 			return nil, fmt.Errorf("cursor: parse poll response: %w", err)
 		}
-		if strings.TrimSpace(session.AccessToken) == "" {
+		if session.AccessToken == "" {
 			return nil, fmt.Errorf("cursor: poll response missing access token")
 		}
-		session.AccessToken = strings.TrimSpace(session.AccessToken)
-		session.RefreshToken = strings.TrimSpace(session.RefreshToken)
-		return &session, nil
+		return session, nil
 	case resp.StatusCode == http.StatusNotFound:
 		return nil, ErrAuthPending
 	default:
@@ -203,16 +228,16 @@ func RefreshViaUserAPIKey(ctx context.Context, httpClient *http.Client, refreshT
 		return nil, fmt.Errorf("cursor: token exchange status %d: %s", resp.StatusCode, msg)
 	}
 
-	var session AuthSession
-	if err := json.Unmarshal(body, &session); err != nil {
+	session, err := parseAuthSession(body)
+	if err != nil {
 		return nil, fmt.Errorf("cursor: parse exchange response: %w", err)
 	}
-	if strings.TrimSpace(session.AccessToken) == "" {
+	if session.AccessToken == "" {
 		return nil, fmt.Errorf("cursor: empty access token in exchange response")
 	}
 	return &TokenRefreshResult{
-		AccessToken:  strings.TrimSpace(session.AccessToken),
-		RefreshToken: strings.TrimSpace(session.RefreshToken),
+		AccessToken:  session.AccessToken,
+		RefreshToken: session.RefreshToken,
 		// exchange_user_api_key does not return expires_in; ExpiresAt falls
 		// back to the access token's JWT exp claim.
 	}, nil
