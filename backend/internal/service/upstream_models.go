@@ -791,10 +791,10 @@ func (s *AccountTestService) fetchUpstreamModelList(ctx context.Context, account
 	return models, body, nil
 }
 
-func (s *AccountTestService) fetchCursorUpstreamModels(ctx context.Context, account *Account) ([]string, error) {
+func (s *AccountTestService) fetchCursorUpstreamModels(ctx context.Context, account *Account) ([]string, []byte, error) {
 	creds := cursorCredentialsFromAccount(account)
 	if creds.AccessToken == "" {
-		return nil, newUpstreamModelSyncConfigError("Cursor access token is required", nil)
+		return nil, nil, newUpstreamModelSyncConfigError("Cursor access token is required", nil)
 	}
 	var fetch func(context.Context, cursor.Credentials) ([]cursor.AvailableModel, error)
 	if s != nil && s.cursorAvailableModels != nil {
@@ -802,13 +802,13 @@ func (s *AccountTestService) fetchCursorUpstreamModels(ctx context.Context, acco
 	}
 	models, err := fetchCursorCatalog(ctx, account, fetch)
 	if err != nil {
-		return nil, newUpstreamModelSyncUpstreamError("Failed to fetch Cursor model picker", err)
+		return nil, nil, newUpstreamModelSyncUpstreamError("Failed to fetch Cursor model picker", err)
 	}
 	ids := cursor.ModelIDs(models)
 	if len(ids) == 0 {
-		return nil, newUpstreamModelSyncUpstreamError("Cursor returned no supported models", nil)
+		return nil, nil, newUpstreamModelSyncUpstreamError("Cursor returned no supported models", nil)
 	}
-	return ids, nil
+	return ids, nil, nil
 }
 
 func (s *AccountTestService) buildUpstreamModelsRequest(ctx context.Context, account *Account) (*http.Request, error) {
